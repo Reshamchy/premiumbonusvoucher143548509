@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Premium Voucher Collection</title>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <script type='text/javascript' src='//pl26335150.profitableratecpm.com/fc/0e/42/fc0e4218ad4f0ff07044791634b71b6c.js'></script>
+  <style>
+    :root {
+      --primary-gradient: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      --card-bg: rgba(255, 255, 255, 0.95);
+      --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      --accent-color: #6a11cb;
+      --text-primary: #333;
+      --text-secondary: #666;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      transition: all 0.3s ease;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--primary-gradient);
+      background-attachment: fixed;
+      min-height: 100vh;
+      color: var(--text-primary);
+      padding: 30px 15px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      color: white;
+      position: relative;
+    }
+
+    .header h1 {
+      font-size: 2.5em;
+      font-weight: 700;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      font-size: 1.1em;
+      max-width: 700px;
+      margin: 0 auto;
+      opacity: 0.95;
+    }
+
+    .header-badge {
+      position: absolute;
+      top: -15px;
+      right: 20px;
+      background: #ff4b2b;
+      color: white;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-size: 0.8em;
+      font-weight: bold;
+      box-shadow: 0 4px 10px rgba(255, 75, 43, 0.5);
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      .header-badge {
+        display: block;
+      }
+    }
+
+    .search-container {
+      max-width: 600px;
+      margin: 0 auto 30px;
+      position: relative;
+    }
+
+    .search-container input {
+      width: 100%;
+      padding: 15px 20px;
+      border-radius: 30px;
+      border: none;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      font-size: 1em;
+      outline: none;
+      padding-left: 45px;
+    }
+
+    .search-container i {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--accent-color);
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 25px;
+      max-width: 1400px;
+      margin: auto;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      box-shadow: var(--card-shadow);
+      padding: 25px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 8px;
+      background: var(--primary-gradient);
+      z-index: -1;
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .merchant-logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8em;
+      color: var(--accent-color);
+    }
+
+    .coins-badge {
+      background: linear-gradient(45deg, #ff9a44, #fc6076);
+      color: white;
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 0.9em;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .code-container {
+      margin: 20px 0;
+      position: relative;
+      height: 60px;
+    }
+
+    .voucher-code {
+      width: 100%;
+      padding: 15px;
+      background: #f9f9f9;
+      border: 2px dashed var(--accent-color);
+      border-radius: 12px;
+      font-size: 1.4em;
+      font-weight: bold;
+      color: var(--accent-color);
+      text-align: center;
+      letter-spacing: 2px;
+      opacity: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .voucher-hidden {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f0f0f0;
+      border-radius: 12px;
+      color: var(--text-secondary);
+      font-size: 0.9em;
+    }
+
+    .info {
+      margin-top: 20px;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-size: 0.95em;
+    }
+
+    .info-label {
+      color: var(--text-secondary);
+    }
+
+    .info-value {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 70px;
+      padding: 30px 0;
+      color: white;
+      font-size: 0.9em;
+    }
+
+    .footer p {
+      margin-bottom: 15px;
+      opacity: 0.9;
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .social-links a {
+      color: white;
+      background: rgba(255, 255, 255, 0.2);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+    }
+
+    .social-links a:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-3px);
+    }
+
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 200px;
+      width: 100%;
+    }
+
+    .loading-spinner {
+      border: 5px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top: 5px solid white;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .reveal-counter {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      font-size: 0.8em;
+      color: var(--text-secondary);
+      display: none;
+    }
+
+    .timer {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #333;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.8em;
+      display: none;
+    }
+
+    .copy-btn {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--accent-color);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+    }
+
+    .copy-btn:hover {
+      background: #5610a7;
+    }
+
+    .toast-notification {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 12px 25px;
+      border-radius: 30px;
+      z-index: 100;
+      display: none;
+    }
+
+    .no-results {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 50px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      color: var(--text-secondary);
+    }
+
+    .ad-container {
+      max-width: 1400px;
+      margin: 30px auto;
+      text-align: center;
+    }
+
+    .banner-ad {
+      margin: 20px auto;
+      max-width: 100%;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    .native-ad {
+      margin: 40px auto;
+      max-width: 100%;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border-radius: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-badge">NEW VOUCHERS ADDED</div>
+    <h1>Premium Bonus Voucher Collection</h1>
+    <p>Unlock exclusive deals with our curated selection of discount vouchers. Click a card 5 times to reveal the voucher code.</p>
+  </div>
+
+  <div class="search-container">
+    <i class="fas fa-search"></i>
+    <input type="text" id="searchInput" placeholder="Search vouchers by store or description...">
+  </div>
+
+  <div class="banner-ad">
+    <script type="text/javascript">
+    atOptions = {
+      'key' : '526c8d6a66cbbdd64c9c55cbe20581ec',
+      'format' : 'iframe',
+      'height' : 60,
+      'width' : 468,
+      'params' : {}
+    };
+    </script>
+    <script type="text/javascript" src="//www.highperformanceformat.com/526c8d6a66cbbdd64c9c55cbe20581ec/invoke.js"></script>
+  </div>
+
+  <div class="container" id="voucherList">
+    <div class="loading">
+      <div class="loading-spinner"></div>
+    </div>
+  </div>
+
+  <div class="native-ad">
+    <script async="async" data-cfasync="false" src="//pl25875164.profitableratecpm.com/776620e7b2d0d829bb35699c436d4fc0/invoke.js"></script>
+    <div id="container-776620e7b2d0d829bb35699c436d4fc0"></div>
+  </div>
+
+  <div class="toast-notification" id="toastNotification">
+    Code copied to clipboard!
+  </div>
+
+  <div class="footer">
+    <div class="social-links">
+      <a href="#"><i class="fab fa-facebook-f"></i></a>
+      <a href="#"><i class="fab fa-twitter"></i></a>
+      <a href="#"><i class="fab fa-instagram"></i></a>
+      <a href="#"><i class="fab fa-telegram"></i></a>
+    </div>
+    <p>© 2025 Premium Bonus Voucher Collection. All rights reserved.</p>
+    <p>New vouchers are added weekly. Don't miss out!</p>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyD14wwgcUIyiPl_qXvx7CtQTO2DEy465II",
+      authDomain: "my-video-earn-app12.firebaseapp.com",
+      databaseURL: "https://my-video-earn-app12-default-rtdb.firebaseio.com",
+      projectId: "my-video-earn-app12",
+      storageBucket: "my-video-earn-app12.firebasestorage.app",
+      messagingSenderId: "967539655660",
+      appId: "1:967539655660:web:95e773e701d35a252936c9",
+      measurementId: "G-DPWBZT3RN5"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const dbRef = firebase.database().ref("vouchers");
+    const voucherList = document.getElementById("voucherList");
+    const searchInput = document.getElementById("searchInput");
+    const toastNotification = document.getElementById("toastNotification");
+    let allVouchers = [];
+
+    // Sample merchant icons (for demonstration)
+    const merchantIcons = {
+      "Amazon": "fa-amazon",
+      "Netflix": "fa-film",
+      "Uber": "fa-car",
+      "Spotify": "fa-music",
+      "Starbucks": "fa-coffee",
+      "Apple": "fa-apple",
+      "Nike": "fa-shoe-prints",
+      "Airbnb": "fa-home",
+      "default": "fa-tag"
+    };
+
+    // Function to show toast notification
+    function showToast(message) {
+      toastNotification.textContent = message;
+      toastNotification.style.display = "block";
+      setTimeout(() => {
+        toastNotification.style.display = "none";
+      }, 3000);
+    }
+
+    // Function to copy text to clipboard
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        showToast("Code copied to clipboard!");
+      }).catch(err => {
+        showToast("Failed to copy code");
+        console.error('Could not copy text: ', err);
+      });
+    }
+
+    // Open Adsterra links and then show code
+    function openAdsterraLinksAndShowCode(codeElement, hiddenElement, copyBtn, timerElement, callback) {
+      const adLink = "https://www.profitableratecpm.com/w1sktcedth?key=2fa1a676696100fab4c3d886d4b21a31";
+      let openedCount = 0;
+      
+      // Function to open each ad in a new tab
+      function openAdTab(index) {
+        if (index < 5) {
+          const newTab = window.open(adLink, "_blank");
+          setTimeout(() => {
+            openAdTab(index + 1);
+          }, 7000);
+        } else {
+          // All ads have been opened, now show the code
+          codeElement.style.opacity = '1';
+          hiddenElement.style.display = 'none';
+          copyBtn.style.opacity = '1';
+          timerElement.style.display = 'block';
+          
+          if (callback) callback();
+        }
+      }
+      
+      // Start opening tabs
+      openAdTab(0);
+    }
+
+    // Function to create merchant name from code if not available
+    function generateMerchantName(code) {
+      // Extract first part of code before any numbers or special chars
+      const match = code.match(/^[A-Za-z]+/);
+      if (match && match[0]) {
+        return match[0].charAt(0).toUpperCase() + match[0].slice(1).toLowerCase();
+      }
+      return "Voucher";
+    }
+
+    // Create voucher card
+    function createVoucherCard(data) {
+      const merchant = data.merchant || generateMerchantName(data.code);
+      const description = data.description || `${merchant} discount voucher`;
+      const icon = merchantIcons[merchant] || merchantIcons.default;
+      
+      const card = document.createElement("div");
+      card.className = "card";
+      card.dataset.searchTerms = `${merchant} ${description} ${data.code} ${data.coins}`.toLowerCase();
+      
+      card.innerHTML = `
+        <div class="card-top">
+          <div class="merchant-logo">
+            <i class="fab ${icon}"></i>
+          </div>
+          <div class="coins-badge">
+            <i class="fas fa-coins"></i>
+            ${data.coins} Coins
+          </div>
+        </div>
+        
+        <h3>${merchant}</h3>
+        <p>${description}</p>
+        
+        <div class="code-container">
+          <div class="voucher-code">
+            ${data.code}
+            <button class="copy-btn" title="Copy code">
+              <i class="fas fa-copy"></i>
+            </button>
+          </div>
+          <div class="voucher-hidden">
+            <i class="fas fa-lock"></i>&nbsp; Click 5 times to reveal code
+          </div>
+          <div class="timer">25s</div>
+        </div>
+        
+        <div class="info">
+          <div class="info-row">
+            <span class="info-label">Expiry Date:</span>
+            <span class="info-value">${data.expiry}</span>
+          </div>
+        </div>
+        
+        <div class="reveal-counter">Clicks: <span>0</span>/5</div>
+      `;
+
+      // Set up click counter and reveal logic
+      let clickCount = 0;
+      const revealCounter = card.querySelector('.reveal-counter');
+      const counterSpan = revealCounter.querySelector('span');
+      const codeElement = card.querySelector('.voucher-code');
+      const hiddenElement = card.querySelector('.voucher-hidden');
+      const timerElement = card.querySelector('.timer');
+      const copyBtn = card.querySelector('.copy-btn');
+
+      card.addEventListener('click', () => {
+        clickCount++;
+        counterSpan.textContent = clickCount;
+        revealCounter.style.display = 'block';
+
+        if (clickCount === 5) {
+          // Modified to open ads first, then show code
+          openAdsterraLinksAndShowCode(codeElement, hiddenElement, copyBtn, timerElement, () => {
+            // Set countdown timer
+            let timeLeft = 25;
+            timerElement.textContent = `${timeLeft}s`;
+            
+            const countdown = setInterval(() => {
+              timeLeft--;
+              timerElement.textContent = `${timeLeft}s`;
+              
+              if (timeLeft <= 0) {
+                clearInterval(countdown);
+                codeElement.style.opacity = '0';
+                hiddenElement.style.display = 'flex';
+                copyBtn.style.opacity = '0';
+                timerElement.style.display = 'none';
+                clickCount = 0;
+                counterSpan.textContent = '0';
+                revealCounter.style.display = 'none';
+              }
+            }, 1000);
+          });
+        }
+      });
+
+      // Set up copy button logic
+      copyBtn.addEventListener('click', (e) => {
+        e.stopPropagation(); // Prevent card click
+        copyToClipboard(data.code);
+      });
+
+      return card;
+    }
+
+    // Filter vouchers by search term
+    function filterBySearch(searchTerm) {
+      const cards = voucherList.querySelectorAll('.card');
+      const normalizedSearchTerm = searchTerm.toLowerCase().trim();
+      
+      cards.forEach(card => {
+        if (card.dataset.searchTerms.includes(normalizedSearchTerm) || normalizedSearchTerm === '') {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      // Check if no results
+      checkNoResults();
+    }
+
+    // Check if no results are showing
+    function checkNoResults() {
+      const visibleCards = voucherList.querySelectorAll('.card[style="display: block;"]');
+      const noResultsElement = voucherList.querySelector('.no-results');
+      
+      if (visibleCards.length === 0) {
+        if (!noResultsElement) {
+          const noResults = document.createElement('div');
+          noResults.className = 'no-results';
+          noResults.innerHTML = `
+            <i class="fas fa-search" style="font-size: 3em; color: #999; margin-bottom: 20px;"></i>
+            <h3>No vouchers found</h3>
+            <p>Try adjusting your search criteria</p>
+          `;
+          voucherList.appendChild(noResults);
+        }
+      } else if (noResultsElement) {
+        noResultsElement.remove();
+      }
+    }
+
+    // Set up search functionality
+    searchInput.addEventListener('input', (e) => {
+      filterBySearch(e.target.value);
+    });
+
+    // Fetch vouchers from Firebase
+    dbRef.on("value", (snapshot) => {
+      voucherList.innerHTML = "";
+      allVouchers = [];
+
+      snapshot.forEach((childSnapshot) => {
+        const data = childSnapshot.val();
+        
+        // Add some additional sample data for demonstration
+        if (!data.merchant) {
+          const possibleMerchants = Object.keys(merchantIcons).filter(m => m !== 'default');
+          data.merchant = possibleMerchants[Math.floor(Math.random() * possibleMerchants.length)];
+        }
+        
+        if (!data.description) {
+          data.description = `Save on your next ${data.merchant} purchase`;
+        }
+        
+        allVouchers.push(data);
+      });
+
+      // Sort by newest first (assuming there's a timestamp field, or just reverse for demo)
+      allVouchers.reverse();
+
+      // Render all vouchers
+      allVouchers.forEach((data) => {
+        const card = createVoucherCard(data);
+        voucherList.appendChild(card);
+      });
+    });
+  </script>
+</body>
+</html>
